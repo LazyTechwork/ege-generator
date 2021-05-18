@@ -1,0 +1,5 @@
+qrcode~=6.1
+pdfrw~=0.4
+reportlab~=3.5.67
+svglib~=1.1.0
+python-barcode~=0.13.1

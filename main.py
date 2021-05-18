@@ -4,7 +4,6 @@ from io import BytesIO
 
 import qrcode.image.svg
 from barcode import Code128
-from barcode.base import Barcode
 from pdfrw import PdfReader, PdfWriter, IndirectPdfDict
 from pdfrw.buildxobj import pagexobj
 from pdfrw.toreportlab import makerl
