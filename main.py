@@ -42,16 +42,14 @@ image.add_data(data["qrcode"])
 image.make_image(image_factory=qrcode.image.svg.SvgPathImage).save("qr.svg")
 
 rv = BytesIO()
-bc_factory = Barcode.default_writer()
-bc_factory.set_options({
+Code128(str(int(datetime.now().timestamp() * 1000))).save("barcode", {
     "module_width": 0.3,
-    "module_height": 13.0,
-    "font_size": 7.0,
-    "text_distance": 3,
-    "quiet_zone": 3.0,
+    "module_height": 10.0,
+    "font_size": 5.0,
+    "text_distance": 2.0,
+    "quiet_zone": 0.0,
     "center_text": True
 })
-Code128(str(int(datetime.now().timestamp() * 1000)), writer=bc_factory).save("barcode")
 
 pages = PdfReader("template.pdf", decompress=False).pages
 pdfWriter = PdfWriter()
@@ -73,9 +71,9 @@ for page_num in range(len(pages)):
                       base_height - 10 * mm, data["title"])
 
     barcode = svg2rlg("barcode.svg")
-    if barcode.height > 13 * mm or barcode.height < 13 * mm:
-        coef = (13 * mm) / barcode.height
-        barcode.height = 13 * mm
+    if barcode.height > 14 * mm or barcode.height < 14 * mm:
+        coef = (14 * mm) / barcode.height
+        barcode.height = 14 * mm
         barcode.width *= coef
         barcode.scale(coef, coef)
     qrcode = svg2rlg("qr.svg")
@@ -85,6 +83,14 @@ for page_num in range(len(pages)):
         qrcode.width *= coef
         qrcode.scale(coef, coef)
     renderPDF.draw(barcode, canvas, 20 * mm + ((70.5 - 20) * mm - barcode.width) / 2.0, base_height - 57 * mm)
+
+    if barcode.height > 13 * mm or barcode.height < 13 * mm:
+        coef = (13 * mm) / barcode.height
+        barcode.height = 13 * mm
+        barcode.width *= coef
+        barcode.scale(coef, coef)
+    barcode.rotate(90)
+    renderPDF.draw(barcode, canvas, 203.25 * mm, base_height - 57 * mm + ((57 - 9) * mm - barcode.width) / 2.0)
     renderPDF.draw(qrcode, canvas, 8.5 * mm, base_height - 38 * mm)
     if page_num == 0:
         # Подзаголовок
