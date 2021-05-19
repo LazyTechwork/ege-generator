@@ -34,7 +34,7 @@ data = {
     "qrcode": "https://vk.com/iisdf"
 }
 base_height = 297 * mm
-base_char_space = 6.05
+base_char_space = 5
 
 image = qrcode.QRCode(box_size=18, border=0)
 image.add_data(data["qrcode"])
@@ -42,10 +42,10 @@ image.make_image(image_factory=qrcode.image.svg.SvgPathImage).save("qr.svg")
 
 rv = BytesIO()
 Code128(str(int(datetime.now().timestamp() * 1000))).save("barcode", {
-    "module_width": 0.3,
+    "module_width": 0.4,
     "module_height": 10.0,
     "font_size": 5.0,
-    "text_distance": 2.0,
+    "text_distance": 2.25,
     "quiet_zone": 0.0,
     "center_text": True
 })
@@ -63,11 +63,12 @@ for page_num in range(len(pages)):
     canvas.doForm(xobj_name)
 
     pdfmetrics.registerFont(TTFont('GlobalFont', 'ttcommons.ttf'))
+    pdfmetrics.registerFont(TTFont('GlobalMonoFont', 'monospaced.ttf'))
     canvas.setFont("GlobalFont", 20)
 
     # Заголовок
     canvas.drawString(54 * mm + ((173 - 54) * mm - stringWidth(data["title"], "GlobalFont", 20)) / 2.0,
-                      base_height - 11 * mm, data["title"])
+                      base_height - 10.75 * mm, data["title"])
 
     barcode = svg2rlg("barcode.svg")
     if barcode.height > 14 * mm or barcode.height < 14 * mm:
@@ -95,16 +96,16 @@ for page_num in range(len(pages)):
         # Подзаголовок
         canvas.drawString(54 * mm + ((173 - 54) * mm - stringWidth(data["blank_register"], "GlobalFont", 20)) / 2.0,
                           base_height - 19.5 * mm, data["blank_register"])
-
+        canvas.setFont("GlobalMonoFont", 20)
         # Регион
-        canvas.drawString(47.5 * mm, base_height - 35.5 * mm, data["region"], charSpace=base_char_space)
+        canvas.drawString(46.5 * mm, base_height - 35.5 * mm, data["region"], charSpace=base_char_space)
         # Код ОО
-        canvas.drawString(65.5 * mm, base_height - 35.5 * mm, data["code_oo"], charSpace=base_char_space)
+        canvas.drawString(64.5 * mm, base_height - 35.5 * mm, data["code_oo"], charSpace=base_char_space)
         # Класс
-        canvas.drawString(106.5 * mm, base_height - 35.5 * mm, data["grade"], charSpace=base_char_space)
+        canvas.drawString(105.5 * mm, base_height - 35.5 * mm, data["grade"], charSpace=base_char_space)
 
         # Название предмета
-        canvas.drawString(96 * mm, base_height - 54.5 * mm, data["subj_name"], charSpace=base_char_space + 1)
+        canvas.drawString(96.2 * mm, base_height - 54.5 * mm, data["subj_name"], charSpace=base_char_space)
         # Код предмета
         canvas.drawString(80 * mm, base_height - 54.5 * mm, data["subj_code"], charSpace=base_char_space)
     elif page_num == 1:
@@ -112,12 +113,13 @@ for page_num in range(len(pages)):
         canvas.drawString(52 * mm + ((173 - 54) * mm - stringWidth(data["blank_answ1"], "GlobalFont", 20)) / 2.0,
                           base_height - 18.5 * mm, data["blank_answ1"])
 
+        canvas.setFont("GlobalMonoFont", 20)
         # Регион
-        canvas.drawString(50 * mm, base_height - 31.5 * mm, data["region"], charSpace=base_char_space)
+        canvas.drawString(49.5 * mm, base_height - 31.5 * mm, data["region"], charSpace=base_char_space)
         # Код предмета
-        canvas.drawString(66.25 * mm, base_height - 31.5 * mm, data["subj_code"], charSpace=base_char_space)
+        canvas.drawString(66.3475 * mm, base_height - 31.5 * mm, data["subj_code"], charSpace=base_char_space)
         # Название предмета
-        canvas.drawString(83.5 * mm, base_height - 31.5 * mm, data["subj_name"], charSpace=base_char_space + 1)
+        canvas.drawString(83.75 * mm, base_height - 31.5 * mm, data["subj_name"], charSpace=base_char_space)
 
     elif page_num == 2:
         # Подзаголовок
@@ -126,12 +128,15 @@ for page_num in range(len(pages)):
         # Подзаголовок 2
         canvas.drawString(133 * mm, base_height - 18.5 * mm, data["blank_answ2_sub1"])
 
+        canvas.setFont("GlobalMonoFont", 20)
         # Регион
-        canvas.drawString(56.5 * mm, base_height - 30 * mm, data["region"], charSpace=base_char_space)
+        canvas.drawString(55.85 * mm, base_height - 30 * mm, data["region"], charSpace=base_char_space)
         # Код предмета
-        canvas.drawString(79.5 * mm, base_height - 30 * mm, data["subj_code"], charSpace=base_char_space)
+        canvas.drawString(79 * mm, base_height - 30 * mm, data["subj_code"], charSpace=base_char_space)
         # Название предмета
-        canvas.drawString(103.25 * mm, base_height - 30 * mm, data["subj_name"], charSpace=base_char_space + 1)
+        canvas.drawString(103.25 * mm, base_height - 30 * mm, data["subj_name"], charSpace=base_char_space)
+        # Лист №
+        canvas.drawString(168 * mm, base_height - 39.5 * mm, "1", charSpace=base_char_space)
 
         # Предупреждение
         canvas.setFont("GlobalFont", 10)
@@ -146,12 +151,13 @@ for page_num in range(len(pages)):
         # Подзаголовок 2
         canvas.drawString(133 * mm, base_height - 18.5 * mm, data["blank_answ2_sub2"])
 
+        canvas.setFont("GlobalMonoFont", 20)
         # Регион
-        canvas.drawString(56.5 * mm, base_height - 30 * mm, data["region"], charSpace=base_char_space)
+        canvas.drawString(55.85 * mm, base_height - 30 * mm, data["region"], charSpace=base_char_space)
         # Код предмета
-        canvas.drawString(79.5 * mm, base_height - 30 * mm, data["subj_code"], charSpace=base_char_space)
+        canvas.drawString(79 * mm, base_height - 30 * mm, data["subj_code"], charSpace=base_char_space)
         # Название предмета
-        canvas.drawString(103.25 * mm, base_height - 30 * mm, data["subj_name"], charSpace=base_char_space + 1)
+        canvas.drawString(103.25 * mm, base_height - 30 * mm, data["subj_name"], charSpace=base_char_space)
 
         # Предупреждение
         canvas.setFont("GlobalFont", 10)
@@ -163,12 +169,13 @@ for page_num in range(len(pages)):
         canvas.drawString(52 * mm + ((173 - 54) * mm - stringWidth(data["blank_answ3"], "GlobalFont", 20)) / 2.0,
                           base_height - 18 * mm, data["blank_answ3"])
 
+        canvas.setFont("GlobalMonoFont", 20)
         # Регион
-        canvas.drawString(56.5 * mm, base_height - 30 * mm, data["region"], charSpace=base_char_space)
+        canvas.drawString(55.85 * mm, base_height - 30 * mm, data["region"], charSpace=base_char_space)
         # Код предмета
-        canvas.drawString(79.5 * mm, base_height - 30 * mm, data["subj_code"], charSpace=base_char_space)
+        canvas.drawString(79 * mm, base_height - 30 * mm, data["subj_code"], charSpace=base_char_space)
         # Название предмета
-        canvas.drawString(103.25 * mm, base_height - 30 * mm, data["subj_name"], charSpace=base_char_space + 1)
+        canvas.drawString(103.25 * mm, base_height - 30 * mm, data["subj_name"], charSpace=base_char_space)
 
         # Предупреждение
         canvas.setFont("GlobalFont", 10)
